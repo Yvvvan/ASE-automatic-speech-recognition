@@ -1,6 +1,4 @@
-# ASE-Gruppe-4
-
-
+# ASE-Gruppe-4 
 
 ## Getting started
 
