@@ -1,19 +1,16 @@
 # import...
 
 def sec_to_samples(x, sampling_rate):
-    return x*sampling_rate
+    return x * sampling_rate
+
 
 def next_pow2(x):
-    found = True
     p = 0
-    while found:
-        if x > 2**p:
+    while True:
+        if x > 2 ** p:
             p += 1
         else:
-            found = True
-    return p
-
-
+            return p
 
 
 def next_pow2_samples(x, sampling_rate):
