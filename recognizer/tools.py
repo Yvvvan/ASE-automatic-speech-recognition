@@ -16,4 +16,4 @@ def dft_window_size(x, sampling_rate):
 
 
 def get_num_frames(signal_length_samples, window_size_samples, hop_size_samples):
-    return math.ceil((signal_length_samples-(window_size_samples-hop_size_samples))/hop_size_samples)
+    return math.ceil((signal_length_samples - (window_size_samples - hop_size_samples)) / hop_size_samples)
