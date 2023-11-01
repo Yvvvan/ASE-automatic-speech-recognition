@@ -1,11 +1,9 @@
 # import...
 
 def sec_to_samples(x, sampling_rate):
-    # TODO implement this method
-    pass
+    return x*sampling_rate
 
 def next_pow2(x):
-    # TODO implement this method
     pass
 
 
