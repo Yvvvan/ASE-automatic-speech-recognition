@@ -9,6 +9,7 @@ def make_frames(audio_data, sampling_rate, window_size, hop_size):
     :param window_size: float, windows size in second
     :param hop_size: float, hop size in second
     :return: array of signal sample frames (w/o Hamming)
+             size = number of frames * frame length
     """
     # R (Rahmenvorschub)
     hop_size_samples = hop_size * sampling_rate
@@ -29,3 +30,13 @@ def make_frames(audio_data, sampling_rate, window_size, hop_size):
             xs.append(audio_data[start:end])
 
     return np.array(xs) * np.hamming(window_size_samples)
+
+def compute_absolute_spectrum(frames):
+    return
+
+if __name__ == "__main__":
+    from scipy.io import wavfile
+    audio_file = '../data/TEST-MAN-AH-3O33951A.wav'
+    sampling_rate, signal = wavfile.read(audio_file)
+    signal_frames = make_frames(signal, sampling_rate, window_size=0.4, hop_size=0.25)
+    debug = "here"
