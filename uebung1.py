@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 from recognizer import feature_extraction
