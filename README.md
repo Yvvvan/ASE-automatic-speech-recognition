@@ -5,7 +5,7 @@
 1. [Aufgabe 1: Merkmalsextraktion I](#aufgabe-1)
 2. [Aufgabe 2: Merkmalsextraktion II](#aufgabe-2)
 3. [Aufgabe 3: Mel-Skalierte Dreiecksfilterbank](#aufgabe-3)
-
+4. [Aufgabe 4: MFCCs](#aufgabe-4)
 
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
@@ -39,6 +39,13 @@ Figure 4: Mel Dreiecksfilterbank
 ![Mel-Spektrums](data/images/aufgabe3.7.png)
 
 Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
+
+## Aufgabe 4
+**MFCCs**
+
+![MFCC_D_DD](data/images/aufgabe4.5.png)
+
+Figure 6: MFCC_D_DD
 
 ---
 ## GIT Command

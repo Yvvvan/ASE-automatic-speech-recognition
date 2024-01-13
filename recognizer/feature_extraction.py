@@ -2,6 +2,7 @@ import numpy as np
 import recognizer.tools as tools
 from scipy.io import wavfile
 from scipy import signal as sig
+import scipy.fftpack as fftpack
 
 
 def make_frames(audio_data, sampling_rate, window_size, hop_size):
@@ -113,12 +114,28 @@ def compute_cepstrum(mel_spectrum, num_ceps):
     :param num_ceps: the number of cepstrum coefficients
     :return: np.array, size = [number of frames] * [num_ceps]
     """
-    # np.fft.rfft: return the real part of the spectrum
-    # np.log: natural logarithm
-    # np.fft.irfft: return the real part of the cepstrum
-    # cepstrum = np.fft.irfft(np.log(np.fft.rfft(mel_spectrum, axis=1)), axis=1)
-    cepstrum = np.fft.irfft(np.log(mel_spectrum), axis=1)
-    return cepstrum[:, :num_ceps]
+    # replace 0 with the smallest representable value
+    mel_spectrum = np.abs(mel_spectrum)
+    mel_spectrum[mel_spectrum == 0] = np.finfo(float).eps
+    # compute the log of the mel spectrum
+    log_mel_spectrum = np.log(mel_spectrum)
+    # compute the cepstrum
+    cepstrum = fftpack.dct(log_mel_spectrum, axis=1, norm='ortho')[:, :num_ceps]
+    return cepstrum
+
+
+def get_delta(x):
+    delta = np.zeros_like(x)
+    delta[0] = x[1] - x[0]
+    delta[-1] = x[-1] - x[-2]
+    for i in range(1, delta.shape[0] - 1):
+        delta[i] = (x[i + 1] - x[i - 1]) / 2
+    return delta
+
+
+def append_delta(x, delta):
+    # output size = [number of frames] * [num_ceps * 2 (= x.num_ceps + delta.num_ceps)]
+    return np.concatenate((x, delta), axis=1)
 
 
 def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
@@ -133,8 +150,34 @@ def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
     elif feature_type == 'FBANK':
         feature = compute_absolute_spectrum(signal_frames)
         mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
-        feature = np.dot(feature, mel_filter.T)
+        feature = apply_mel_filters(feature, mel_filter)
         feature = 20 * np.log10(feature)
+    elif feature_type == 'MFCC':
+        feature = compute_absolute_spectrum(signal_frames)
+        mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
+        feature = apply_mel_filters(feature, mel_filter)
+        feature = compute_cepstrum(feature, num_ceps)
+        delta = get_delta(feature)
+        feature = append_delta(feature, delta)
+    elif feature_type == 'MFCC_D':
+        feature = compute_absolute_spectrum(signal_frames)
+        mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
+        feature = apply_mel_filters(feature, mel_filter)
+        feature = compute_cepstrum(feature, num_ceps)
+        delta = get_delta(feature)
+        feature = append_delta(feature, delta)
+    elif feature_type == 'MFCC_D_DD':
+        feature = compute_absolute_spectrum(signal_frames)
+        mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
+        feature = apply_mel_filters(feature, mel_filter)
+        feature = compute_cepstrum(feature, num_ceps)
+        delta = get_delta(feature)
+        delta_delta = get_delta(delta)
+        print(feature.shape, delta.shape, delta_delta.shape)
+        feature = append_delta(feature, delta)
+        print(feature.shape)
+        feature = append_delta(feature, delta_delta)
+        print(feature.shape)
     else:
         feature = None
     return feature
