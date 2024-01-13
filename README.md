@@ -56,6 +56,23 @@ git checkout [branch-name]
 
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
-![Dastellung Frames](data/images/aufgabe1.png)
+![Dastellung Frames1](data/images/aufgabe1.6.png)
 Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
-Hamming-Fenster) für TEST-MAN-AH-3O33951A.wav
+Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
+
+![Dastellung Frames2](data/images/aufgabe1.7.png)
+Figure 2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
+Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
+
+## Aufgabe 2
+**Merkmalsextraktion II (Spektralanalyse)**
+![Spektogramm](data/images/aufgabe2.3.png)
+Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
+
+## Aufgabe 3
+**Mel-Skalierte Dreiecksfilterbank**
+![Dreiecksfilterbank](data/images/aufgabe3.6.png)
+Figure 4: Mel Dreiecksfilterbank
+
+![Mel-Spektrums](data/images/aufgabe3.7.png)
+Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
