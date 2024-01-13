@@ -34,6 +34,7 @@ Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
 ![Dreiecksfilterbank](data/images/aufgabe3.6.png)
 
 Figure 4: Mel Dreiecksfilterbank
+
 ---
 ![Mel-Spektrums](data/images/aufgabe3.7.png)
 
