@@ -15,6 +15,7 @@ torch.manual_seed(SEED)
 torch.cuda.manual_seed(SEED)
 torch.cuda.manual_seed_all(SEED)
 
+
 def find_best_model(filelist):
     """
     find_best_model() finds the model with best performance on the dev set.
@@ -31,6 +32,7 @@ def find_best_model(filelist):
     Keymax = max(zip(filedict.values(), filedict.keys()))[1]
     return Keymax, filedict[Keymax]
 
+
 def train(dataset, model, device, optimizer=None, criterion=None):
     """
     train() trains the model. 
@@ -42,17 +44,34 @@ def train(dataset, model, device, optimizer=None, criterion=None):
     Return: 
         the performance on the training set and the trained model.
     """
-                                                            # bring model into training mode
-                                                            # traverse each batch of samples
-                                                            # move data onto gpu, if gpu available
+    # bring model into training mode
+    model.train()
+    # traverse each batch of samples
+    # add tqdm to show the progress of training
+    for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset)):
+        # move data onto gpu if gpu available
+        audio_feat = audio_feat.to(device)
+        label = label.to(device)
+        # zero the parameter gradients
+        optimizer.zero_grad()
+        # using model compute posterior probabilities
+        output = model(audio_feat)
+        # compute loss value
+        loss = criterion(output, label)
+        # update model parameters
+        loss.backward()
+        optimizer.step()
 
-                                                            # zero the parameter gradients
-                                                            # using model compute posterior probabilities
-                                                            # compute loss value
-                                                            # update model parameters
-
-                                                            # compute accuracy
+    # compute accuracy
+    accuracy = 0
+    for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
+        audio_feat = audio_feat.to(device)
+        label = label.to(device)
+        output = model(audio_feat)
+        pred = output.argmax(dim=1, keepdim=True)
+        accuracy += pred.eq(label.view_as(pred)).sum().item()
     return accuracy, model
+
 
 def evaluation(dataset, model, device):
     """
@@ -63,13 +82,26 @@ def evaluation(dataset, model, device):
     Return: 
         the accuracy on the given dataset, the predictions saved in dictionary and the model.
     """
-                                                            # bring model into evaluation mode
-                                                            # traverse each batch of samples
-                                                            # move data onto gpu if gpu available
-
-                                                            # using trained model, compute posterior probabilities
-                                                            # compute accuracy
+    # bring model into evaluation mode
+    model.eval()
+    # traverse each batch of samples
+    outputdict = {}
+    accuracy = 0
+    for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
+        # move data onto gpu if gpu available
+        audio_feat = audio_feat.to(device)
+        label = label.to(device)
+        output = model(audio_feat)
+        pred = output.argmax(dim=1, keepdim=True)
+        accuracy += pred.eq(label.view_as(pred)).sum().item()
+        # save the predictions in dictionary
+        # print(filename)
+        for i in range(len(filename)):
+            outputdict.update({filename[i]: pred[i].item()})
+    # compute accuracy
+    accuracy /= len(dataset.dataset)
     return accuracy, outputdict, model
+
 
 def run(config, datadicts=None):
     """
