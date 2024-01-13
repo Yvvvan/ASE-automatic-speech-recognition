@@ -77,7 +77,7 @@ def get_mel_filters(sampling_rate, window_size_sec, n_filters, f_min=0, f_max=80
     weights = np.zeros((n_filters, N // 2))
     for m in range(1, n_filters + 1):
         for k in range(N // 2):
-            if f[m-1] <= k < f[m]:
+            if f[m - 1] <= k < f[m]:
                 weights[m - 1, k] = 2 * (k - f[m - 1]) / ((f[m + 1] - f[m - 1]) * (f[m] - f[m - 1]))
             elif f[m] <= k <= f[m + 1]:
                 weights[m - 1, k] = 2 * (f[m + 1] - k) / ((f[m + 1] - f[m - 1]) * (f[m + 1] - f[m]))
@@ -130,6 +130,36 @@ def append_delta(x, delta):
     return np.concatenate((x, delta), axis=1)
 
 
+def add_context(feats, left_context=6, right_context=6):
+    """
+    the function is used to add context to the features
+    :param feats: [f_len, f_dim], f_len: number of frames, f_dim: feature dimension
+    :param left_context: the number of left context
+    :param right_context: the number of right context
+    :return: [f_len, f_dim , (left_context + right_context + 1)]
+    """
+    f_len = feats.shape[0]
+    f_dim = feats.shape[1]
+    new_feats = np.zeros((f_len, f_dim, left_context + 1 + right_context))
+    # copy the first frame to the left context and the last frame to the right context
+    for i in range(left_context):
+        new_feats[i, :, :] = feats[0, :, :]
+    for i in range(right_context):
+        new_feats[-i, :, :] = feats[-1, :, :]
+    # copy the feats to the middle context
+    for i in range(f_len):
+        new_feats[i, :, left_context] = feats[i, :, :]
+    # copy the left context
+    for i in range(left_context):
+        for j in range(left_context - i):
+            new_feats[i, :, j] = feats[0, :, :]
+    # copy the right context
+    for i in range(right_context):
+        for j in range(right_context - i):
+            new_feats[-i, :, -j] = feats[-1, :, :]
+    return new_feats
+
+
 def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
                      feature_type='STFT', n_filters=24, fbank_fmin=0,
                      fbank_fmax=8000, num_ceps=13):
@@ -143,6 +173,9 @@ def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
         feature = compute_absolute_spectrum(signal_frames)
         mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
         feature = apply_mel_filters(feature, mel_filter)
+        # shall i ？
+        feature[feature == 0] = np.finfo(float).eps
+        feature = 20 * np.log10(feature)
     elif feature_type == 'MFCC':
         feature = compute_absolute_spectrum(signal_frames)
         mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
@@ -169,3 +202,14 @@ def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
     else:
         feature = None
     return feature
+
+
+def compute_features_with_context(audio_file, window_size=25e-3,
+                                  hop_size=10e-3, feature_type='STFT',
+                                  n_filters=24, fbank_fmin=0,
+                                  fbank_fmax=8000, num_ceps=13,
+                                  left_context=4, right_context=4):
+    feature = compute_features(audio_file, window_size, hop_size, feature_type,
+                               n_filters, fbank_fmin, fbank_fmax, num_ceps)
+    feature_with_context = add_context(feature, left_context, right_context)
+    return feature_with_context
