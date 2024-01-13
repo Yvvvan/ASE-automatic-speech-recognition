@@ -46,9 +46,11 @@ def train(dataset, model, device, optimizer=None, criterion=None):
     """
     # bring model into training mode
     model.train()
+    correct = 0
+    total = 0
     # traverse each batch of samples
     # add tqdm to show the progress of training
-    for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset)):
+    for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset), total=len(dataset)):
         # move data onto gpu if gpu available
         audio_feat = audio_feat.to(device)
         label = label.to(device)
@@ -61,15 +63,12 @@ def train(dataset, model, device, optimizer=None, criterion=None):
         # update model parameters
         loss.backward()
         optimizer.step()
-
-    # compute accuracy
-    accuracy = 0
-    for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
-        audio_feat = audio_feat.to(device)
-        label = label.to(device)
-        output = model(audio_feat)
-        pred = output.argmax(dim=1, keepdim=True)
-        accuracy += pred.eq(label.view_as(pred)).sum().item()
+        # compute accuracy
+        threshold = 0.5
+        pred = (output > threshold).float()
+        correct += pred.eq(label.view_as(pred)).sum().item()
+        total += label.size(0)
+    accuracy = correct / total
     return accuracy, model
 
 
@@ -86,20 +85,23 @@ def evaluation(dataset, model, device):
     model.eval()
     # traverse each batch of samples
     outputdict = {}
-    accuracy = 0
-    for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
-        # move data onto gpu if gpu available
-        audio_feat = audio_feat.to(device)
-        label = label.to(device)
-        output = model(audio_feat)
-        pred = output.argmax(dim=1, keepdim=True)
-        accuracy += pred.eq(label.view_as(pred)).sum().item()
-        # save the predictions in dictionary
-        # print(filename)
-        for i in range(len(filename)):
-            outputdict.update({filename[i]: pred[i].item()})
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
+            # move data onto gpu if gpu available
+            audio_feat = audio_feat.to(device)
+            label = label.to(device)
+            output = model(audio_feat)
+            threshold = 0.5
+            pred = (output > threshold).float()
+            correct += pred.eq(label.view_as(pred)).sum().item()
+            total += label.size(0)
+            # save the predictions in dictionary
+            for i in range(len(filename)):
+                outputdict[filename[i]] = {'pred': pred[i].item(), 'label': label[i].item()}
     # compute accuracy
-    accuracy /= len(dataset.dataset)
+    accuracy = correct / total
     return accuracy, outputdict, model
 
 
