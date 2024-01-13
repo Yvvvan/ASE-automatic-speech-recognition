@@ -1,9 +1,45 @@
 # ASE-Gruppe-4 
 
 ## Table of Contents
-0. [GIT Command](#git-Command)
+0. [GIT Command](#git-command)
 1. [Aufgabe 1: Merkmalsextraktion I](#aufgabe-1)
+2. [Aufgabe 2: Merkmalsextraktion II](#aufgabe-2)
+3. [Aufgabe 3: Mel-Skalierte Dreiecksfilterbank](#aufgabe-3)
 
+
+## Aufgabe 1
+**Merkmalsextraktion I (Fensterung)**
+
+![Dastellung Frames1](data/images/aufgabe1.6.png)
+
+Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
+Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
+
+---
+![Dastellung Frames2](data/images/aufgabe1.7.png)
+
+Figure 2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
+Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
+
+## Aufgabe 2
+**Merkmalsextraktion II (Spektralanalyse)**
+
+![Spektogramm](data/images/aufgabe2.3.png)
+
+Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
+
+## Aufgabe 3
+**Mel-Skalierte Dreiecksfilterbank**
+
+![Dreiecksfilterbank](data/images/aufgabe3.6.png)
+
+Figure 4: Mel Dreiecksfilterbank
+---
+![Mel-Spektrums](data/images/aufgabe3.7.png)
+
+Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
+
+---
 ## GIT Command
 ``` bash
 ## STAGE & SNAPSHOT
@@ -53,26 +89,3 @@ git checkout
 git checkout [branch-name]
 
 ```
-
-## Aufgabe 1
-**Merkmalsextraktion I (Fensterung)**
-![Dastellung Frames1](data/images/aufgabe1.6.png)
-Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
-Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
-
-![Dastellung Frames2](data/images/aufgabe1.7.png)
-Figure 2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
-Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
-
-## Aufgabe 2
-**Merkmalsextraktion II (Spektralanalyse)**
-![Spektogramm](data/images/aufgabe2.3.png)
-Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
-
-## Aufgabe 3
-**Mel-Skalierte Dreiecksfilterbank**
-![Dreiecksfilterbank](data/images/aufgabe3.6.png)
-Figure 4: Mel Dreiecksfilterbank
-
-![Mel-Spektrums](data/images/aufgabe3.7.png)
-Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
