@@ -6,6 +6,8 @@
 2. [Aufgabe 2: Merkmalsextraktion II](#aufgabe-2)
 3. [Aufgabe 3: Mel-Skalierte Dreiecksfilterbank](#aufgabe-3)
 4. [Aufgabe 4: MFCCs](#aufgabe-4)
+5. [Aufgabe 5: PyTorch Einführung](#aufgabe-5)
+
 
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
@@ -46,6 +48,14 @@ Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 ![MFCC_D_DD](data/images/aufgabe4.5.png)
 
 Figure 6: MFCC_D_DD
+
+## Aufgabe 5
+**PyTorch Einführung**
+
+`python uebung5.py --sourcedatadir .\data\VoxCeleb_gender\`
+or add the parameter to the run configuration of the IDE
+> if something wrong, add env variable: `KMP_DUPLICATE_LIB_OK=TRUE` to the run configuration of the IDE
+> or directly run `$env:KMP_DUPLICATE_LIB_OK="TRUE"` in windows powershell
 
 ---
 ## GIT Command
