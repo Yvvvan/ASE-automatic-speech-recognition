@@ -38,7 +38,7 @@ def compute_features(feature_type='STFT'):
     plt.gca().invert_yaxis()
     plt.colorbar()
     plt.xlabel("Time in Second")
-    plt.show(aspect='auto')
+    plt.show()
 
 
 def show_mel_filters():

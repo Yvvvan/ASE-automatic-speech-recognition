@@ -164,11 +164,8 @@ def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
         feature = compute_cepstrum(feature, num_ceps)
         delta = get_delta(feature)
         delta_delta = get_delta(delta)
-        print(feature.shape, delta.shape, delta_delta.shape)
         feature = append_delta(feature, delta)
-        print(feature.shape)
         feature = append_delta(feature, delta_delta)
-        print(feature.shape)
     else:
         feature = None
     return feature

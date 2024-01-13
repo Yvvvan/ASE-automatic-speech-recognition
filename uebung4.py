@@ -28,8 +28,7 @@ def compute_features(feature_type='STFT'):
     plt.gca().invert_yaxis()
     plt.colorbar()
     plt.xlabel("Time in Second")
-    plt.show(aspect='auto')
-
+    plt.show()
 
 if __name__ == "__main__":
     compute_features(feature_type='MFCC_D_DD')
