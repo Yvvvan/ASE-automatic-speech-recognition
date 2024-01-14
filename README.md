@@ -18,54 +18,54 @@
 <p>Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 </p>
-<div>
+</div>
 
 ---
-<center>
+<div align="center">
 <img src="data/images/aufgabe1.7.png" />
 <p>Figure 2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
 </p>
-</center>
+</div>
 
 ## Aufgabe 2
 **Merkmalsextraktion II (Spektralanalyse)**
 
-<center>
+<div align="center">
 <img src="data/images/aufgabe2.3.png" />
 <p>
 Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
 </p>
-</center>
+</div>
 
 
 ## Aufgabe 3
 **Mel-Skalierte Dreiecksfilterbank**
 
-<center>
+<div align="center">
 <img src="data/images/aufgabe3.6.png" />
 <p>
 Figure 4: Mel Dreiecksfilterbank
 </p>
-</center>
+</div>
 
 ---
-<center>
+<div align="center">
 <img src="data/images/aufgabe3.7.png" />
 <p>
 Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 </p>
-</center>
+</div>
 
 ## Aufgabe 4
 **MFCCs**
 
-<center>
+<div align="center">
 <img src="data/images/aufgabe4.5.png" />
 <p>
 Figure 6: MFCC_D_DD
 </p>
-</center>
+</div>
 
 ## Aufgabe 5
 **PyTorch Einführung**
@@ -78,20 +78,20 @@ or add the parameter to the run configuration of the IDE
 ## Aufgabe 6
 **DNN-Training I - Vorbereitung der Daten**
 
-<center>
+<div align="center">
 <img src="data/images/aufgabe6.5.1.png" />
 <p>
 Figure 7: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
 </p>
-</center>
+</div>
 
 ---
-<center>
+<div align="center">
 <img src="data/images/aufgabe6.5.2.png" />
 <p>
 Figure 8: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 </p>
-</center>
+</div>
 
 
 ## Aufgabe 7
