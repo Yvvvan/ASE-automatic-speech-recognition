@@ -75,5 +75,5 @@ class Dataloader(Dataset):  # For instantiating train, validation and test datas
                                            hop_size_samples, hmm)
 
         audiofeat = torch.FloatTensor(audiofeat)
-        label = torch.FloatTensor(label)
+        label = torch.FloatTensor(label) # one-hot vector
         return audiofeat, label, filename

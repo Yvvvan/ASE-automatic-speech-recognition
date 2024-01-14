@@ -8,7 +8,7 @@
 4. [Aufgabe 4: MFCCs](#aufgabe-4)
 5. [Aufgabe 5: PyTorch Einführung](#aufgabe-5)
 6. [Aufgabe 6: DNN-Training I - Vorbereitung der Daten](#aufgabe-6)
-7. [Aufgabe 6: DNN-Training II](#aufgabe-7)
+7. [Aufgabe 7: DNN-Training II](#aufgabe-7)
 
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
@@ -159,6 +159,15 @@ the job of the dnn is to predict the right hmm_state for each frame for each aud
 and the requirement said each batch is an audio file.
 so the accuracy of one batch is the match of the hmm_states between the output and the label. <br>
 the accuracy of the whole dataset is the mean of all accuracy from each batch. <br>
+
+<div align=center>
+<img src="data/images/aufgabe7.5.1.png" />
+<p>Posterior after Epoch-1</p>
+<hr>
+<img src="data/images/aufgabe7.5.2.png" />
+<p>Posterior best model (at Epoch-13)</p>
+</div>
+
 
 ---
 ## GIT Command
