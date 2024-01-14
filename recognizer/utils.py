@@ -68,12 +68,12 @@ class Dataloader(Dataset):  # For instantiating train, validation and test datas
         # Get ground-truth label
         labelpath = self.data_dir + self.datadict[filename]["targetdir"]
         sampling_rate, signal = wavfile.read(filepath)
-        window_size_samples = tools.sec_to_samples(self.window_size, sampling_rate)
+        window_size_samples = tools.dft_window_size(self.window_size, sampling_rate)
         hop_size_samples = tools.sec_to_samples(self.hop_size, sampling_rate)
         hmm = HMM.HMM()
         label = tools.praat_file_to_target(labelpath, sampling_rate, window_size_samples,
                                            hop_size_samples, hmm)
 
         audiofeat = torch.FloatTensor(audiofeat)
-        label = torch.FloatTensor([label])
+        label = torch.FloatTensor(label)
         return audiofeat, label, filename
