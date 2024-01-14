@@ -10,6 +10,29 @@
 6. [Aufgabe 6: DNN-Training I - Vorbereitung der Daten](#aufgabe-6)
 7. [Aufgabe 7: DNN-Training II](#aufgabe-7)
 
+## folder structure
+```bash
+├── data
+      ├── images          #images for readme
+      ├── TIDIGITS-ASE    # will ignored by .gitignore
+      ├── VoxCeleb_gender # will ignored by .gitignore
+      ├── TEST-MAN-AH-3O33951A.wav
+├── dataset               # json for TIDIGITS
+├── recongnizer
+      ├── __init__.py
+      ├── feature_extraction.py
+      ├── hmm.py
+      ├── model.py
+      ├── tools.py
+      ├── train.py
+      ├── utils.py
+├── results               # the models after training aufgabe 7
+├── torch_intro           # the stuff for aufgabe 5
+├── uebung1.py            # aufgabe 1
+├── ...                   # aufgabe x
+```
+
+
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
 
