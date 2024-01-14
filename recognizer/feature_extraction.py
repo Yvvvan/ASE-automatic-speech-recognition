@@ -177,14 +177,12 @@ def compute_features(audio_file, window_size=25e-3, hop_size=10e-3,
         feature = apply_mel_filters(feature, mel_filter)
         # shall i ？
         feature[feature == 0] = np.finfo(float).eps
-        feature = 20 * np.log10(feature)
+        feature = np.log(feature)
     elif feature_type == 'MFCC':
         feature = compute_absolute_spectrum(signal_frames)
         mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
         feature = apply_mel_filters(feature, mel_filter)
-        feature = compute_cepstrum(feature, num_ceps)
-        delta = get_delta(feature)
-        feature = append_delta(feature, delta)
+        feature = compute_cepstrum(feature, num_ceps)  # mel-log included
     elif feature_type == 'MFCC_D':
         feature = compute_absolute_spectrum(signal_frames)
         mel_filter = get_mel_filters(sampling_rate, window_size, n_filters, fbank_fmin, fbank_fmax)
