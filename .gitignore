@@ -2,3 +2,4 @@
 /.idea/
 /data/VoxCeleb_gender/
 /data/TIDIGITS-ASE/
+/torch_intro/trained/model/

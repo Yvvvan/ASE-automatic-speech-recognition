@@ -7,7 +7,7 @@
 3. [Aufgabe 3: Mel-Skalierte Dreiecksfilterbank](#aufgabe-3)
 4. [Aufgabe 4: MFCCs](#aufgabe-4)
 5. [Aufgabe 5: PyTorch Einführung](#aufgabe-5)
-
+6. [Aufgabe 6: DNN-Training I - Vorbereitung der Daten](#aufgabe-6)
 
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
@@ -56,6 +56,19 @@ Figure 6: MFCC_D_DD
 or add the parameter to the run configuration of the IDE
 > if something wrong, add env variable: `KMP_DUPLICATE_LIB_OK=TRUE` to the run configuration of the IDE
 > or directly run `$env:KMP_DUPLICATE_LIB_OK="TRUE"` in windows powershell
+
+## Aufgabe 6
+**DNN-Training I - Vorbereitung der Daten**
+
+![Ground-Truth-Labels für das Beispiel TEST1](data/images/aufgabe6.5.1.png)
+
+Figure 7: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
+
+![Ground-Truth-Labels für das Beispiel DEV1](data/images/aufgabe6.5.2.png)
+
+Figure 7: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
+
+
 
 ---
 ## GIT Command

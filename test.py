@@ -12,6 +12,4 @@ tg = tgio.openTextgrid(textgrid_file_path)
 # 打印层级结构
 print(tg.tierNameList)
 
-# 获取特定层的标注信息
-tier_name = "your_tier_name"
-entry_list = tg.tierDict[tier_name].entryList
+print()

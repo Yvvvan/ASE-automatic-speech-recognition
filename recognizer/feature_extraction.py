@@ -138,25 +138,27 @@ def add_context(feats, left_context=6, right_context=6):
     :param right_context: the number of right context
     :return: [f_len, f_dim , (left_context + right_context + 1)]
     """
+    if left_context == 0 and right_context == 0:
+        return feats
+
     f_len = feats.shape[0]
     f_dim = feats.shape[1]
-    new_feats = np.zeros((f_len, f_dim, left_context + 1 + right_context))
-    # copy the first frame to the left context and the last frame to the right context
-    for i in range(left_context):
-        new_feats[i, :, :] = feats[0, :, :]
-    for i in range(right_context):
-        new_feats[-i, :, :] = feats[-1, :, :]
-    # copy the feats to the middle context
+
+    # Pad the sequence with copies of the first and last frames
+    if left_context > 0:
+        left_padding = np.tile(feats[0], (left_context, 1))
+        append_feats = np.vstack([left_padding, feats])
+
+    if right_context > 0:
+        right_padding = np.tile(append_feats[-1], (right_context, 1))
+        append_feats = np.vstack([append_feats, right_padding])
+
+    context_frames = []
     for i in range(f_len):
-        new_feats[i, :, left_context] = feats[i, :, :]
-    # copy the left context
-    for i in range(left_context):
-        for j in range(left_context - i):
-            new_feats[i, :, j] = feats[0, :, :]
-    # copy the right context
-    for i in range(right_context):
-        for j in range(right_context - i):
-            new_feats[-i, :, -j] = feats[-1, :, :]
+        context_frame = append_feats[i:i+left_context+right_context+1]
+        context_frames.append(context_frame)
+    new_feats = np.dstack(context_frames)
+    new_feats = np.swapaxes(new_feats, 0, 2)
     return new_feats
 
 
