@@ -118,7 +118,8 @@ Figure 8: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 
 
 ## Aufgabe 7
-1 How to handle the **DATA** before feeding into the DNN:
+1 How to handle the **DATA** before feeding into the DNN (the steps below are already done in the previous aufgabe 1-6 `compute_features` and `compute_features_with_context`. 
+listed here only for understanding what happened and how the size of the data changed) <br>
 
 | step  | file                      | input stuff                                      | output size                                               | note                                                    |
 |-------|---------------------------|--------------------------------------------------|-----------------------------------------------------------|---------------------------------------------------------|
@@ -140,19 +141,19 @@ Figure 8: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 > c_dim: **context** dimension, we use 10, so it's 21=10+10+1 <br>
 
 2 get **OUTPUT** from the DNN: <br>
-now we have the input data for DNN with size (f_len, f_dim, c_dim) <br>
-DataLoader will form them in batches with a specific batch_size(bs), so the input size will be (bs, f_len, f_dim, c_dim)
+now we have the input data for DNN with size `(f_len, f_dim, c_dim)` <br>
+DataLoader will form them in batches with a specific batch_size(bs), so the input size will be `(bs, f_len, f_dim, c_dim)`
 As required, the DNN will do the following steps:
 ```
 (bs, f_len, f_dim, c_dim) 
 -> (bs, f_len, idim)         # flatten:      idim = f_dim * c_dim
--> (bs, f_len, hidden_dim)   # go through the hidden layers
+-> (bs, f_len, hidden_dim)   # hidden layers (we don't care)
 -> (bs, f_len, odim)         # output layer: odim = classes = hmm_states(use the script) = 106
 ```
 
 3 read **LABEL** from dataset:<br>
-the label from the dataset, if read properly, is one-hot encoded, with size (f_len, odim)<br>
-To calculate cross entropy, we need to convert it to the index of the max value, with size (f_len, 1)<br>
+the label from the dataset, if read properly, is one-hot encoded, with size `(f_len, odim)`<br>
+To calculate cross entropy, we need to convert it to the index of the max value, with size `(f_len, 1)` or `(f_len,)`<br>
 which means, the label is a list of class_index.
 ```
 # 
@@ -163,25 +164,32 @@ which means, the label is a list of class_index.
 
 4 **LOSS** function:<br>
 the loss function is the cross entropy, which takes the output of the DNN and the label from the dataset(one-hot not ok). <br>
-the output: (bs, f_len, odim) <br>
-the label: (bs, f_len, 1) <br>
-here, maybe need to swap the dim of the output (bs, odim, f_len)<br>
+the output: `(bs, f_len, odim)` <br>
+the label: `(bs, f_len, 1)` <br>
+here, maybe need to swap the dim of the output `(bs, odim, f_len)` (I did this step directly in model, but there should be some better ways.)<br>
 
 5 **POSTERIOR**<br>
-turn the output to a posterior, the cross entropy loss function contains the softmax, so the last step we can use the output directly. <br>
-but by test, the output need to be processed by softmax again.(because we don't care about the loss anymore, 
-no cross entropy loss) <br>
-after softmax, the numbers in each f_len[i] should sum to 1. <br> 
-so the number at f_len[i]odin[j] is the probability of the hmm_state[j] at frame[i]. <br>
+the output: `(bs, f_len, odim)` <br>
+we take one sample from the batch(and actually bs=1 here),<br>
+the output: `(f_len, odim)` <br>
+turn the output to a posterior, the cross entropy loss function contains the softmax, so the last step we can use the output directly. 
+So we don't add softmax in model or after output during the train.<br>
+but by test, the output need to be processed by softmax. (simply, cross entropy has it, so we don't add it twice.
+but test no, so we add softmax to turn the numbers into probabilities.) <br>
+after softmax, the numbers in each `f_len[i]` should sum to `1`. <br> 
+so the number at `f_len[i]odin[j]` is the probability of the `hmm_state[j]` at `frame[i]`. <br>
 
 6 **ACCURACY** function:<br>
-the output or the label mean, at f_len[i] the output class is hmm_state[j]. 
-from aufgabe6.5, we see the images of labels. the x-axisi is the f_len,
-the y-axis is the hmm_state. <br>
+the output or the label mean, at frame `f_len[i]` the probability of the output hmm_state(class) `j` is `odin[j]`. 
+from aufgabe6.5, we see the images of labels. the x-axis is the `f_len`,
+the y-axis is the `hmm_state`. <br>
 the job of the dnn is to predict the right hmm_state for each frame for each audio. <br>
-and the requirement said each batch is an audio file.
-so the accuracy of one batch is the match of the hmm_states between the output and the label. <br>
-the accuracy of the whole dataset is the mean of all accuracy from each batch. <br>
+and the requirement said each batch is an audio file (bs=1).<br>
+use the label `(f_len, 1)` like `[[1],[0],[2],...]` which means at frame0 is the hmm_state1, frame1 is hmm_state0, frame2 is hmm_state2, ...<br>
+to compare with the output `(f_len, odim)` but first argmax agian, so the output is `(f_len, 1)` also like `[[1],[0],[2],...]`<br>
+so the accuracy of one batch is the match rate of the `f_len`-many hmm_states between the output and the label. <br>
+This accuracy is the accuracy of one audio file and also, because bs=1, the accuracy of one batch. <br>
+the accuracy of the whole dataset(train,evaluation,test) is the mean of all accuracy from each batch (each audio file). <br>
 
 <div align=center>
 <img src="data/images/aufgabe7.5.1.png" />
