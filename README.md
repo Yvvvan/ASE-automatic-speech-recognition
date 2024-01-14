@@ -13,12 +13,12 @@
 ## Aufgabe 1
 **Merkmalsextraktion I (Fensterung)**
 
-<center>
+<div align="center">
 <img src="data/images/aufgabe1.6.png" />
 <p>Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 </p>
-</center>
+<div>
 
 ---
 <center>
