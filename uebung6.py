@@ -63,18 +63,16 @@ if __name__ == '__main__':
     dev_dataset = utils.Dataloader(devdict, feat_params)
     dev_loader = torch.utils.data.DataLoader(dev_dataset, batch_size=1, shuffle=False, num_workers=0)
     for i, (audiofeat, label, filename) in enumerate(dev_loader):
-        print(audiofeat.shape)
-        print(label.shape)
         print(filename)
         # plot the label of the first two samples
         if i < 2:
-            #用matplotlib plot labelmatrix
             plt.figure()
             plt.imshow(label[0].numpy().T)
             plt.gca().invert_yaxis()
             plt.title('label of file: <dev> ' + filename[0])
+            plt.colorbar()
             plt.show()
-        if i == 2:
+        else:
             break
 
 
