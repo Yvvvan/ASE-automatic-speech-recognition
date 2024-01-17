@@ -205,47 +205,52 @@ the accuracy of the whole dataset(train,evaluation,test) is the mean of all accu
 *Viterbi-Algorithmus* <br>
 Go through Markov-HMM Part forwardly: <br>
 
-we have a HMM structure, with initial input. so we can calculate the probability of each end_state, where we are. 
+we have a HMM structure, with initial input. so we can calculate the probability of each end_state (where we probably are). 
 ```
 A: the HMM structure, a transition matrix, with size (hmm_states, hmm_states) , A_ij:probability form state_i to state_j
 Π：the initial input, a vector, with size (hmm_states, 1), Π_i:probability to begin at state_i
-see pic on page 18 and notes on page 19
+see pic on page 18
 ```
 
-① the probability of states
-we can calculate the probability of a state chain: 
+① the probability of states,
+we can calculate the probability of a state chain (where we probably are) 
 ```
-P(i_1, i_2, ..., i_T) 
+P(I) = P(i_1, i_2, ..., i_T) 
 = bayes rule
 = P(i_2, ..., i_T | i_1)* P(i_1) 
-= P(i_3, ..., i_T | i_1, i_2) * P(i_2|i_1) * P(i_1) <br>
+= P(i_3, ..., i_T | i_1, i_2) * P(i_2|i_1) * P(i_1)
 = P(i_4, ..., i_T | i_1, i_2, i_3) * P(i_3|i_1, i_2) * P(i_2|i_1) * P(i_1) 
 ...... 
 = P(i_T | i_1, i_2, ..., i_T-1) * P(i_T-1 | i_1, i_2, ..., i_T-2) * ... * P(i_2|i_1) * P(i_1)
 = markov assumption 
-= P(i_T | i_T-1) * P(i_T-1 | i_T-2) * ... * P(i_2|i_1) * P(i_1)
 * the state i_T is only related to state i_T-1, so P(i_T | i_1, i_2, ..., i_T-1) = P(i_T |i_T-1)
+= P(i_T | i_T-1) * P(i_T-1 | i_T-2) * ... * P(i_2|i_1) * P(i_1)
+= f(A, Π) // f is a function of A and Π on page 19
 ```
 
 
-② the probability of the observation
-we need know a probability of the observation to given a state.
+② the probability of the observation,
+we need know a probability of the observation to given a state.  <br>
+(it's raining(state), and what's the probability i read the humidity(observation) at 80%, 50%, ...)
 ```
 O: oberservation
 I: state
 P(O|I) = ? // how to get
-1. we train a DNN feed O, output P(I|O), and we trust it.
+1. we train a DNN feed O, output P(I|O), and we trust it. 
+   * (so we can say we kown "i read the humidity at 80%, the probability of raining is P(I|O))
 2. we use bayes rule to get P(O|I) from P(I|O) 
-now we get P(O|I) and we call it b(O)
+   * (now we know "it's raining, the probability of a humidity at 80% is P(O|I))
+now we get P(O|I) and we call it b(O) the Likelihood.
 ```
 
-③ we introduce a input called λ
+③ we introduce an input called λ, we summarize the structure of the HMM
 ```
 λ = (A, Π, b(O)) which is the setting of the HMM
 the ① changes to P(I|λ) := the state under an input λ, no big changes
 the ② changes to P(O|I,λ) := the observation under an input λ and a state I, no big changes, here *
 *:= (means you give a input λ, the machine should go into state I , then you make the observation O)
 ```
+
 ④ we need to know what we are doing
 ```
 we are going to find out the state chain I, which we are now located in.
@@ -260,14 +265,16 @@ I* = argmax f(Π ,A ,b(O))
 ```
 solved.
 
-And actually we might define the problem first and then tear apart the formula to solve it. <br>
-Now HMM-ViterbiAlgo <br>
+And actually we might define the problem first and then tear apart the formula to solve it, like ④③①②. 
+
+Now HMM-ViterbiAlgo :
 ```
 this part is better to read the cod in uebung8.py
 
 I = [i_1, i_2, ..., i_T] := the best state chain
 Φ = max P(I,O|λ) := the probability after we found the best state chain
 Ψ = previous best node at current state
+...
 ```
 
 ---
