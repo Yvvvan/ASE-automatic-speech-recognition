@@ -10,7 +10,7 @@ def viterbi( logLike, logPi, logA ):
     :param logA:     log(transition matrix)
     :return:
     stateSequence:   most likely state sequence [i_1, i_2, ..., i_T]
-    pStar: max. probability of the most likely state sequence P(i_1, i_2, ..., i_T | o_1, o_2, ..., o_T)
+    pStar: p*(o|λ), max. probability of the most likely state sequence
     """
     # T: number of observations, N: number of states
     T, N = logLike.shape
