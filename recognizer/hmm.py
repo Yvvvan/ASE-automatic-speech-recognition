@@ -1,4 +1,5 @@
 import numpy as np
+from recognizer.tools import viterbi
 
 # default HMM
 WORDS = {
@@ -111,7 +112,16 @@ class HMM:
                             transcription.append(word)
                     break
             last_state = state
-        return ' '.join(transcription)
+        # return ' '.join(transcription)     # return string
+        return transcription                 # return list
+
+    def posteriors_to_transcription(self, posteriors):
+        """
+        Returns the transcription words
+        """
+        state_sequence, pStar = viterbi(posteriors, self.logPi, self.logA)
+        return self.getTranscription(state_sequence)
+
 
 
 
