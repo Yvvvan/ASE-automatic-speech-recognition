@@ -313,3 +313,4 @@ def wav_to_posteriors(model, audio_file_dict, parameters):
             plt.show()
         else:
             break
+    return outpre
