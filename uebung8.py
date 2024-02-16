@@ -20,7 +20,7 @@ def viterbi( logLike, logPi, logA ):
     # psi[t, i] = the best previous state(argmax) at time t-1 [i_t-1] that bring us to this state i at time t
     psi = np.zeros((T, N), dtype=int)
 
-    phi[0, :] = logPi + logLike[0, :]  # initial probability at time t=0
+    phi[0, :] = logPi + logLike[0, :]  # initial probability at time t=0   # multiply in log domain = add
     psi[0, :] = -1                     # no previous state at time t=0
 
     for t in range(1, T):   # time
