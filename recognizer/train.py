@@ -100,7 +100,8 @@ def evaluation(dataset, model, device, onestep=False):
     corrects = []
     all_preds = {}
     with torch.no_grad():
-        for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset), total=len(dataset), desc='Ev|Te'):
+        # for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset), total=len(dataset), desc='Ev|Te'):
+        for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
             # move data onto gpu if gpu available
             audio_feat = audio_feat.to(device)
             label = label.to(device)
@@ -274,7 +275,7 @@ def test(config, testdict):
     return outpre
 
 
-def wav_to_posteriors(model, audio_file_dict, parameters):
+def wav_to_posteriors(model, audio_file_dict, parameters, plot=False):
     # get model
     model = torch.load(model, map_location=parameters["device"])
 
@@ -292,25 +293,26 @@ def wav_to_posteriors(model, audio_file_dict, parameters):
                                                    num_workers=parameters["NWORKER"])
 
     testacc, outpre, _ = evaluation(data_loader_test, model, parameters["device"], onestep=True)
-    for i, (audiofeat, label, filename) in enumerate(data_loader_test):
-        # plot the label of the first two samples
-        if i == 0:
-            print( "Test Acc of {} is {}".format(filename[0], testacc))
-            # subplot 0: show the label of the first sample
-            plt.subplot(2, 1, 1)
-            plt.imshow(label[0].numpy().T)
-            plt.gca().invert_yaxis()
-            plt.title("label of " + filename[0])
-            # subplot 1: show the outpre of the first sample
-            plt.subplot(2, 1, 2)
-            plt.imshow(outpre[filename[0]])
-            plt.gca().invert_yaxis()
-            plt.title("prediction of " + filename[0])
+    if plot:
+        for i, (audiofeat, label, filename) in enumerate(data_loader_test):
+            # plot the label of the first two samples
+            if i == 0:
+                print( "Test Acc of {} is {}".format(filename[0], testacc))
+                # subplot 0: show the label of the first sample
+                plt.subplot(2, 1, 1)
+                plt.imshow(label[0].numpy().T)
+                plt.gca().invert_yaxis()
+                plt.title("label of " + filename[0])
+                # subplot 1: show the outpre of the first sample
+                plt.subplot(2, 1, 2)
+                plt.imshow(outpre[filename[0]])
+                plt.gca().invert_yaxis()
+                plt.title("prediction of " + filename[0])
 
-            plt.subplots_adjust(right=0.8)
-            cax = plt.axes([0.85, 0.1, 0.02, 0.8])  # [x位置, y位置, 宽度, 高度]
-            plt.colorbar(cax=cax)
-            plt.show()
-        else:
-            break
+                plt.subplots_adjust(right=0.8)
+                cax = plt.axes([0.85, 0.1, 0.02, 0.8])  # [x位置, y位置, 宽度, 高度]
+                plt.colorbar(cax=cax)
+                plt.show()
+            else:
+                break
     return outpre
