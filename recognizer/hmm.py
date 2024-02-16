@@ -8,9 +8,11 @@ WORDS = {
 }
 
 
-class HMM:  
+class HMM:
 
     words = {}
+    logPi = np.array([])  # initial state probabilities: Size = num_states * 1
+    logA = np.array([])  # state transition probabilities : Size = num_states * num_states
 
     def __init__(self, words=WORDS):
         """
@@ -18,6 +20,44 @@ class HMM:
         :param input: word of the defined HMM.
         """
         self.words = words
+        num_states = self.get_num_states()
+        num_words = len(words['name'])
+        # Initialize logPi to all zeros and then take the log
+        self.logPi = np.zeros(num_states)
+        self.logPi[0] = 1.0  # Assuming the first state is the starting state
+        # set zero to a very small value
+        self.logPi[self.logPi == 0] = 1e-10
+        # log
+        self.logPi = np.log(self.logPi)
+
+        # Initialize logA with the transitions probabilities and then take the log
+        self.logA = np.zeros((num_states, num_states))
+
+        # Assuming each state has a transition to itself and the next state
+        # Linear HMM
+        for i, size in enumerate(WORDS['size']):
+            start_index = sum(WORDS['size'][:i])
+            end_index = start_index + size
+            # Transition intra word
+            for j in range(start_index, end_index):
+                self.logA[j, j] = 1          # Transition to itself
+                if j + 1 < end_index:
+                    self.logA[j, j + 1] = 1  # Transition to next state
+
+            # Transition inter word (all other words)
+            for k in range(num_words):
+                start_index_k = sum(WORDS['size'][:k])
+                self.logA[end_index - 1, start_index_k] = 1
+
+        # normalize each row of the transition matrix
+        self.logA = self.logA / self.logA.sum(axis=1)[:, None]
+        # set zero to a very small value
+        self.logA[self.logA == 0] = 1e-10
+
+        # log
+        self.logA = np.log(self.logA)
+
+
 
     def get_num_states(self):
         """
@@ -45,3 +85,39 @@ class HMM:
         end_state = start_idx[idx]
 
         return [n for n in range(start_state, end_state) ]
+
+
+    def getTranscription(self, stateSequence):
+        """
+        Returns the word for a state sequence.
+        :param stateSequence: state sequence of the word.
+        :return: word of the state sequence.
+        """
+        transcription = []
+        word_start_state = {self.words['name'][i]: sum(self.words['size'][:i]) for i in range(len(self.words['name']))}
+        word_end_state = {self.words['name'][i]: sum(self.words['size'][:i + 1]) for i in range(len(self.words['name']))}
+        last_state = None
+
+        for state in stateSequence:
+            for word in self.words['name']:
+                if word_start_state[word] <= state < word_end_state[word]:
+                    # ignore the silence
+                    if word != 'sil':
+                        # ignore the repeated words (intra word)
+                        if len(transcription) == 0 or transcription[-1] != word:
+                            transcription.append(word)
+                        # dont ignore the inter repeated words
+                        elif len(transcription) > 0 and state < last_state and transcription[-1] == word:
+                            transcription.append(word)
+                    break
+            last_state = state
+        return ' '.join(transcription)
+
+
+
+
+
+
+
+
+""
