@@ -10,6 +10,9 @@
 6. [Aufgabe 6: DNN-Training I - Vorbereitung der Daten](#aufgabe-6)
 7. [Aufgabe 7: DNN-Training II](#aufgabe-7)
 8. [Aufgabe 8: Viterbi-Algorithmus](#aufgabe-8)
+9. [Aufgabe 9: Verbundworterkennung](#aufgabe-9)
+10. [Aufgabe 10: Fertigstellung des Erkenners und Bestimmung der Wortfehlerrate](#aufgabe-10)
+
 
 ## folder structure
 ```bash
@@ -39,7 +42,7 @@
 
 <div align="center">
 <img src="data/images/aufgabe1.6.png" />
-<p>Figure 1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
+<p>Figure 1-1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 </p>
 </div>
@@ -47,7 +50,7 @@ Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 ---
 <div align="center">
 <img src="data/images/aufgabe1.7.png" />
-<p>Figure 2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
+<p>Figure 1-2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
 </p>
 </div>
@@ -58,7 +61,7 @@ Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
 <div align="center">
 <img src="data/images/aufgabe2.3.png" />
 <p>
-Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
+Figure 2-1: Spektogramm für TEST-MAN-AH-3O33951A.wav
 </p>
 </div>
 
@@ -69,7 +72,7 @@ Figure 3: Spektogramm für TEST-MAN-AH-3O33951A.wav
 <div align="center">
 <img src="data/images/aufgabe3.6.png" />
 <p>
-Figure 4: Mel Dreiecksfilterbank
+Figure 3-1: Mel Dreiecksfilterbank
 </p>
 </div>
 
@@ -77,7 +80,7 @@ Figure 4: Mel Dreiecksfilterbank
 <div align="center">
 <img src="data/images/aufgabe3.7.png" />
 <p>
-Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
+Figure 3-2: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 </p>
 </div>
 
@@ -87,7 +90,7 @@ Figure 5: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 <div align="center">
 <img src="data/images/aufgabe4.5.png" />
 <p>
-Figure 6: MFCC_D_DD
+Figure 4-1: MFCC_D_DD
 </p>
 </div>
 
@@ -105,7 +108,7 @@ or add the parameter to the run configuration of the IDE
 <div align="center">
 <img src="data/images/aufgabe6.5.1.png" />
 <p>
-Figure 7: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
+Figure 6-1: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
 </p>
 </div>
 
@@ -113,12 +116,20 @@ Figure 7: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
 <div align="center">
 <img src="data/images/aufgabe6.5.2.png" />
 <p>
-Figure 8: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
+Figure 6-2: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 </p>
 </div>
 
 
 ## Aufgabe 7
+
+```bash
+# formal parameter:
+--datasdir ./dataset/ --savedir ./results/model
+# environment variable:
+ KMP_DUPLICATE_LIB_OK=TRUE
+```
+
 1 How to handle the **DATA** before feeding into the DNN (the steps below are already done in the previous aufgabe 1-6 `compute_features` and `compute_features_with_context`. 
 listed here only for understanding what happened and how the size of the data changed) <br>
 
@@ -194,10 +205,10 @@ the accuracy of the whole dataset(train,evaluation,test) is the mean of all accu
 
 <div align=center>
 <img src="data/images/aufgabe7.5.1.png" />
-<p>Posterior after Epoch-1</p>
+<p>Figure 7-1: Posterior after Epoch-1</p>
 <hr>
 <img src="data/images/aufgabe7.5.2.png" />
-<p>Posterior best model (at Epoch-13)</p>
+<p>Figure 7-2: Posterior best model (at Epoch-13)</p>
 </div>
 
 
@@ -276,6 +287,35 @@ I = [i_1, i_2, ..., i_T] := the best state chain
 Ψ = previous best node at current state
 ...
 ```
+
+## Aufgabe 9
+*Verbundworterkennung* <br>
+The important thing is to understand the structure of the HMM, <br>
+which is shown in the script Kap.10-11 Page 32, Page 49-50. <br>
+Nothing difficult to program. Pay attention to the duplicated word. <br>
+
+<div align="center">
+<img src="data/images/aufgabe9.png" />
+<p>
+Figure 9: The transition matrix of the HMM for the word recognition
+</p>
+</div>
+
+## Aufgabe 10
+*Fertigstellung des Erkenners und Bestimmung der Wortfehlerrate* <br>
+```bash
+# formal parameter:
+--sourcedatadir ./dataset/ --savedir ./results/
+# environment variable:
+ KMP_DUPLICATE_LIB_OK=TRUE
+```
+<div align=center>
+<img src="data/images/aufgabe10.3.1.png" />
+<p>Figure 10-1: The first 3 WER</p>
+<hr>
+<img src="data/images/aufgabe10.3.2.png" />
+<p>Figure 7-2: The Total WER</p>
+</div>
 
 ---
 ## GIT Command
