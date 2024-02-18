@@ -39,7 +39,7 @@ if __name__ == '__main__':
         "num_ceps": 13,
         "left_context": 10,
         "right_context": 10,
-        "data_dir": "./data",
+        "data_dir": "./dataset",
     }
 
     feat_params = [config["window_size"], config["hop_size"],
@@ -48,17 +48,8 @@ if __name__ == '__main__':
                    config["num_ceps"], config["left_context"],
                    config["right_context"], config["data_dir"]]
 
-    """¨Uberpr¨ufung und Darstellung der Ergebnisse: Erstellen Sie ein uebung6.py-Skript,
-    in dem Sie einen Data-Loader f¨ur das Development-Set erstellen. Setzen Sie die
-    Batchgr¨oße bitte auf 1. Iterieren Sie durch Ihren Data-Loader, um sicherzustellen,
-    dass dieser die extrahierten Merkmale und die entsprechenden Ground-Truth-Labels
-    zur¨uckgibt. Plotten Sie die Ground-Truth-Labels der ersten beiden Samples, die vom
-    Data-Loader zur¨uckgegeben wurden, und ¨uberpr¨ufen Sie, ob sie unterschiedlich sind.
-    Falls sie gleich aussehen, k¨onnte Ihr Data-Loader einen Fehler aufweisen. Setzen Sie
-    sampling rate=16000."""
-
     # Load data
-    traindict, devdict, testdict = utils.get_data('./dataset')
+    traindict, devdict, testdict = utils.get_data(config["data_dir"])
     # Create data loader
     dev_dataset = utils.Dataloader(devdict, feat_params)
     dev_loader = torch.utils.data.DataLoader(dev_dataset, batch_size=1, shuffle=False, num_workers=0)
