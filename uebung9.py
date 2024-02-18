@@ -29,7 +29,7 @@ if __name__ == "__main__":
     # check if the initial state probabilities are stochastic
     print('sum initial state probabilities: ', np.sum(np.exp(hmm.logPi)))
 
-    plt.imshow(np.exp(hmm.logA))
+    plt.imshow(np.exp(hmm.logA), cmap='Reds')
     # print(hmm.logA)
     plt.xlabel('nach Zustand j')
     plt.ylabel('von Zustand i')
