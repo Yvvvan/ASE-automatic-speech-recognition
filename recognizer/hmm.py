@@ -112,6 +112,7 @@ class HMM:
                             transcription.append(word)
                     break
             last_state = state
+        transcription = [word.upper() for word in transcription]
         # return ' '.join(transcription)     # return string
         return transcription                 # return list
 
