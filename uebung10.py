@@ -7,14 +7,16 @@ import recognizer.hmm as HMM
 from recognizer.train import run, test, wav_to_posteriors
 from recognizer.utils import *
 from recognizer.train import evaluation
+from tqdm import tqdm
 
-def test_model(datadir, hmm, model, parameters):
+
+def test_model(datadir, hmm, model, parameters, testrun=False):
     N_total, D_total, I_total, S_total = 0, 0, 0, 0
     count = 0
     # read the data
     traindict, devdict, testdict = get_data(datadir)
-    # get the test lab data
-    for key in testdict.keys():
+    outpre = test(parameters, testdict, onestep=False, model=model)
+    for key in tqdm(testdict.keys(), total=len(testdict.keys()), desc='WER calculation:'):
         lab_data = datadir + '/TIDIGITS-ASE/TEST/lab/' + key + '.lab'
         # read the lab data
         with open(lab_data, 'r') as f:
@@ -23,10 +25,7 @@ def test_model(datadir, hmm, model, parameters):
             lab = ''.join(lab).strip().split(' ')
             testdict[key]['lab'] = lab
         # get the wav data
-        wav_data = datadir + testdict[key]['audiodir']
-        file = key
-        posteriors_dnn_dict = wav_to_posteriors(model_dir, {file: testdict[file]}, parameters)
-        posteriors_dnn = posteriors_dnn_dict[file].T
+        posteriors_dnn = outpre[key].T
         words = hmm.posteriors_to_transcription(posteriors_dnn)
         words = [w.upper() for w in words]
         N, D, I, S = tools.needlemann_wunsch(lab, words)
@@ -35,13 +34,14 @@ def test_model(datadir, hmm, model, parameters):
         I_total += I
         S_total += S
         count += 1
-        # print('-' * 50)
-        # print('REF: ', lab)
-        # print('OUT: ', words)
-        # print('N: ', N, 'D: ', D, 'I: ', I, 'S: ', S)
-        # print('current Total WER: ', 100 * (D_total + I_total + S_total) / N_total)
-        # if count == 3:
-        #     break
+        if testrun:
+            print('-' * 50)
+            print('REF: ', lab)
+            print('OUT: ', words)
+            print('N: ', N, 'D: ', D, 'I: ', I, 'S: ', S)
+            print('current Total WER: ', 100 * (D_total + I_total + S_total) / N_total)
+            if count == 3:
+                break
     WER = 100 * (D_total + I_total + S_total) / N_total
     return WER
 
@@ -49,7 +49,7 @@ def test_model(datadir, hmm, model, parameters):
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./TIDIGITS-ASE', type=str,
+    parser.add_argument('--sourcedatadir', default='./dataset', type=str,
                         help='Dir saves the datasource information')
     parser.add_argument('--savedir', default='./trained', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
@@ -79,10 +79,10 @@ if __name__ == "__main__":
                   'num_ceps': 13,
                   'left_context': 10,
                   'right_context': 10}
-
     # default HMM
     hmm = HMM.HMM()
 
+    # ----------------------------------------------------------------------------------------------------------
     # 1.) Test mit vorgegebenen Daten
     # die Zustandswahrscheinlichkeiten passend zum HMM aus UE6
     posteriors = np.load('data/TEST-WOMAN-BF-7O17O49A.npy')
@@ -91,10 +91,12 @@ if __name__ == "__main__":
     words = hmm.posteriors_to_transcription(posteriors)
     print('Given posteriori OUT: {}'.format(words))  # OUT: [’SEVEN’, ’OH’, ’ONE’, ’SEVEN’, ’OH’, ’FOUR’, ’NINE’]
 
-    # --------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------
     # 2.) with audio data
     # in Übung7 trainiertes DNN Model name
-    model_name = '13_0.001_0.7004_0.6619'
+    # model_name = '13_0.001_0.7004_0.6619'
+    model_name = '3_0.0001_0.7099_0.6800'
+    # model_name = 'baseline_model'
     # Model Pfad
     model_dir = os.path.join(savedir, 'model', model_name + '.pkl')
     # Laden des DNNs
@@ -111,36 +113,26 @@ if __name__ == "__main__":
     # Hier bitte den eigenen Erkenner laufen lassen und das Ergebnis vergleichen
     traindict, devdict, testdict = get_data(datadir)
     file = test_audio.split('/')[-1].split('.')[0]
-    # parameters['datadir'] = datadir
     parameters['device'] = device
     parameters['data_dir'] = datadir
     parameters['batch_size'] = 1
     parameters['NWORKER'] = 0
-
-    ### the following code can skip the image step
-    # feat_params = [parameters['window_size'], parameters['hop_size'], parameters['feature_type'],
-    #                parameters['n_filters'], parameters['fbank_fmin'], parameters['fbank_fmax'],
-    #                parameters['num_ceps'], parameters['left_context'], parameters['right_context'],
-    #                datadir]
-    #
-    # test_dataset = Dataloader({file: testdict[file]}, feat_params)
-    # data_loader_test = torch.utils.data.DataLoader(test_dataset, shuffle=False,
-    #                                                batch_size=1,
-    #                                                num_workers=0)
-    #
-    # test_acc, posteriors_dnn_dict, _ = evaluation(data_loader_test, model, device, onestep=True)
-    # posteriors_dnn = posteriors_dnn_dict[file].T
-    # words = hmm.posteriors_to_transcription(posteriors_dnn)
+    parameters['model_dir'] = os.path.join(savedir, 'model')
 
     ### the following code uses directly the wav_to_posteriors function, which is required in the exercise
     posteriors_dnn_dict = wav_to_posteriors(model_dir, {file: testdict[file]}, parameters)
     posteriors_dnn = posteriors_dnn_dict[file].T
     words = hmm.posteriors_to_transcription(posteriors_dnn)
 
+    ### the following code can also do the transcription with the model, using the test function
+    # outpre = test(parameters, {file: testdict[file]}, onestep=True)
+    # posteriors_dnn = outpre[file].T
+    # words = hmm.posteriors_to_transcription(posteriors_dnn)
 
     print('OUT: {}'.format(words))  # OUT: [’SEVEN’, ’OH’, ’ONE’, ’SEVEN’, ’OH’, ’FOUR’, ’NINE’]
 
-    # test DNN
+    # ----------------------------------------------------------------------------------------------------------
+    # 3) test DNN
     wer = test_model(datadir, hmm, model, parameters)
     print('--' * 40)
     print("Total WER: {}".format(wer))
