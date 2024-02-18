@@ -13,9 +13,9 @@ torch.cuda.manual_seed_all(SEED)
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./VoxCeleb_gender', type=str, help='Dir saves the datasource information')
-    parser.add_argument('--datasdir', default='./torch_intro/dataset', type=str, help='Dir saves the datasource information')
-    parser.add_argument('--savedir', default='./torch_intro/trained', type=str, help='Dir to save trained model and results')
+    parser.add_argument('--sourcedatadir', default='./dataset', type=str, help='Dir saves the datasource information')
+    parser.add_argument('--datasdir', default='./dataset', type=str, help='Dir saves the datasource information')
+    parser.add_argument('--savedir', default='./trained', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
     return args
 
@@ -60,19 +60,20 @@ if __name__ == '__main__':
         "num_ceps": 13,
         "left_context": 10,
         "right_context": 10,
-        "data_dir": "./data",
+        "data_dir": "./dataset",
         "results_dir": resultsdir,
         "model_dir": modeldir
     }
 
     #### here i spilt the train+evaluation and test, in run() will only train and evaluate, in test() will do test
-    # run(config, datadicts=[traindict, devdict, testdict]) # train and evaluate after each epoch
-    # test(config, testdict) # only do test, return a dict of posteriors, key: filename, value: posteriors
+    run(config, datadicts=[traindict, devdict, testdict]) # train and evaluate after each epoch
+    test(config, testdict, onestep=False)   # only do test, return a dict of posteriors, key: filename, value: posteriors
+                                            # onestep=True, only return the posteriors of the first file in the testdict
 
     #### this function is to show one sample of posteriors using one trained model
-    file = "TEST-WOMAN-BF-7O17O49A"
-    model_path = "./results/model/13_0.001_0.7004_0.6619.pkl"
-    wav_to_posteriors(model_path, {file: testdict[file]}, config) # test
+    # file = "TEST-WOMAN-BF-7O17O49A"
+    # model_path = "trained/model/13_0.001_0.7004_0.6619.pkl"
+    # wav_to_posteriors(model_path, {file: testdict[file]}, config, plot=True) # test
 
 
 
