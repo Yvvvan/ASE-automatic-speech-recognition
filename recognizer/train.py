@@ -100,8 +100,8 @@ def evaluation(dataset, model, device, onestep=False):
     corrects = []
     all_preds = {}
     with torch.no_grad():
-        # for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset), total=len(dataset), desc='Ev|Te'):
-        for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
+        for batch_idx, (audio_feat, label, filename) in tqdm(enumerate(dataset), total=len(dataset), desc='Ev|Te'):
+        # for batch_idx, (audio_feat, label, filename) in enumerate(dataset):
             # move data onto gpu if gpu available
             audio_feat = audio_feat.to(device)
             label = label.to(device)
@@ -227,6 +227,14 @@ def run(config, datadicts=None):
             model_to_save['epoch'] = epoch
             model_to_save['trainscore'] = trainscore
             model_to_save['evalscore'] = evalscore
+            # save model
+            for param_group in optimizer.param_groups:
+                currentlr = param_group['lr']
+            OUTPUT_DIR = os.path.join(modeldir,
+                                      '_'.join([str(model_to_save['epoch']), str(currentlr),
+                                                str(model_to_save['trainscore'])[:6],
+                                                str(model_to_save['evalscore'])[:6]]) + '.pkl')
+            torch.save(model_to_save['model'], OUTPUT_DIR)
 
         if continuescore >= run_wait:
             stop_counter = 0
@@ -246,7 +254,7 @@ def run(config, datadicts=None):
     # Model has trained as many epochs as specified (subject to possible early stopping).
 
 
-def test(config, testdict):
+def test(config, testdict, onestep=True, model=None):
     # Parameters for feature extraction
     feat_params = [config["window_size"], config["hop_size"],
                    config["feature_type"], config["n_filters"],
@@ -265,13 +273,14 @@ def test(config, testdict):
     modeldir = config["model_dir"]
     besttrainmodel, besttrainacc = find_best_model(os.listdir(modeldir))
     # Load model
-    model = torch.load(os.path.join(modeldir, besttrainmodel),
+    if model is None:
+        model = torch.load(os.path.join(modeldir, besttrainmodel),
                        map_location=config["device"])
 
     # Finally, evaluate the trained model on the test set and save the prediction.
-    testacc, outpre, _ = evaluation(data_loader_test, model, config["device"], onestep=True)
+    testacc, outpre, _ = evaluation(data_loader_test, model, config["device"], onestep=onestep)
 
-    print("\nTest Acc: {}".format(testacc))
+    print("\nDNN Test Acc: {}".format(testacc))
     return outpre
 
 
