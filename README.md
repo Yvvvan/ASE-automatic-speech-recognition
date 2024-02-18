@@ -16,12 +16,14 @@
 
 ## folder structure
 ```bash
+├── images   #images for readme
 ├── data
-      ├── images          #images for readme
-      ├── TIDIGITS-ASE    # will ignored by .gitignore
       ├── VoxCeleb_gender # will ignored by .gitignore
       ├── TEST-MAN-AH-3O33951A.wav
-├── dataset               # json for TIDIGITS
+      ├── TEST-WOMAN-BF-7O17O49A.npy
+├── dataset               
+      ├── TIDIGITS-ASE    # will ignored by .gitignore
+      ├── jsons           # json for TIDIGITS
 ├── recongnizer
       ├── __init__.py
       ├── feature_extraction.py
@@ -41,7 +43,7 @@
 **Merkmalsextraktion I (Fensterung)**
 
 <div align="center">
-<img src="data/images/aufgabe1.6.png" />
+<img src="/images/aufgabe1.6.png" />
 <p>Figure 1-1: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 </p>
@@ -49,7 +51,7 @@ Hamming-Fenster) window_size 25ms, hop_size 10ms für TEST-MAN-AH-3O33951A.wav
 
 ---
 <div align="center">
-<img src="data/images/aufgabe1.7.png" />
+<img src="/images/aufgabe1.7.png" />
 <p>Figure 1-2: Dastellung der ersten vier Frames (mit Multiplikation mit einem
 Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
 </p>
@@ -59,7 +61,7 @@ Hamming-Fenster) window_size 400ms, hop_size 250ms für TEST-MAN-AH-3O33951A.wav
 **Merkmalsextraktion II (Spektralanalyse)**
 
 <div align="center">
-<img src="data/images/aufgabe2.3.png" />
+<img src="/images/aufgabe2.3.png" />
 <p>
 Figure 2-1: Spektogramm für TEST-MAN-AH-3O33951A.wav
 </p>
@@ -70,7 +72,7 @@ Figure 2-1: Spektogramm für TEST-MAN-AH-3O33951A.wav
 **Mel-Skalierte Dreiecksfilterbank**
 
 <div align="center">
-<img src="data/images/aufgabe3.6.png" />
+<img src="/images/aufgabe3.6.png" />
 <p>
 Figure 3-1: Mel Dreiecksfilterbank
 </p>
@@ -78,7 +80,7 @@ Figure 3-1: Mel Dreiecksfilterbank
 
 ---
 <div align="center">
-<img src="data/images/aufgabe3.7.png" />
+<img src="/images/aufgabe3.7.png" />
 <p>
 Figure 3-2: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 </p>
@@ -88,7 +90,7 @@ Figure 3-2: Mel-Spektrums für TEST-MAN-AH-3O33951A.wav
 **MFCCs**
 
 <div align="center">
-<img src="data/images/aufgabe4.5.png" />
+<img src="/images/aufgabe4.5.png" />
 <p>
 Figure 4-1: MFCC_D_DD
 </p>
@@ -96,17 +98,25 @@ Figure 4-1: MFCC_D_DD
 
 ## Aufgabe 5
 **PyTorch Einführung**
-
-`python uebung5.py --sourcedatadir .\data\VoxCeleb_gender\`
-or add the parameter to the run configuration of the IDE
-> if something wrong, add env variable: `KMP_DUPLICATE_LIB_OK=TRUE` to the run configuration of the IDE
-> or directly run `$env:KMP_DUPLICATE_LIB_OK="TRUE"` in windows powershell
-
+```bash
+# formal parameter:
+python uebung5.py --sourcedatadir ./VoxCeleb_gender
+## or add the parameter to the run configuration of the IDE
+## (this is the deault arguments, if the data is not in `./VoxCeleb_gender`, change the route)
+# # environment variable:
+KMP_DUPLICATE_LIB_OK=TRUE
+## if something wrong, add env variable: `KMP_DUPLICATE_LIB_OK=TRUE` to the run configuration of the IDE
+## or directly run `$env:KMP_DUPLICATE_LIB_OK="TRUE"` in windows powershell
+```
 ## Aufgabe 6
 **DNN-Training I - Vorbereitung der Daten**
-
+```
+# environment variable:
+KMP_DUPLICATE_LIB_OK=TRUE
+## or directly run `$env:KMP_DUPLICATE_LIB_OK="TRUE"` in windows powershell
+```
 <div align="center">
-<img src="data/images/aufgabe6.5.1.png" />
+<img src="/images/aufgabe6.5.1.png" />
 <p>
 Figure 6-1: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
 </p>
@@ -114,7 +124,7 @@ Figure 6-1: Ground-Truth-Labels für das Beispiel TEST1 TEST-WOMAN-BF-7O17O49A
 
 ---
 <div align="center">
-<img src="data/images/aufgabe6.5.2.png" />
+<img src="/images/aufgabe6.5.2.png" />
 <p>
 Figure 6-2: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 </p>
@@ -125,7 +135,7 @@ Figure 6-2: Ground-Truth-Labels für das Beispiel DEV1 TEST-MAN-HJ-16O1A
 
 ```bash
 # formal parameter:
---datasdir ./dataset/ --savedir ./results/model
+--datasdir ./dataset/ --savedir ./trained/
 # environment variable:
  KMP_DUPLICATE_LIB_OK=TRUE
 ```
@@ -204,10 +214,10 @@ This accuracy is the accuracy of one audio file and also, because bs=1, the accu
 the accuracy of the whole dataset(train,evaluation,test) is the mean of all accuracy from each batch (each audio file). <br>
 
 <div align=center>
-<img src="data/images/aufgabe7.5.1.png" />
+<img src="/images/aufgabe7.5.1.png" />
 <p>Figure 7-1: Posterior after Epoch-1</p>
 <hr>
-<img src="data/images/aufgabe7.5.2.png" />
+<img src="/images/aufgabe7.5.2.png" />
 <p>Figure 7-2: Posterior best model (at Epoch-13)</p>
 </div>
 
@@ -295,7 +305,7 @@ which is shown in the script Kap.10-11 Page 32, Page 49-50. <br>
 Nothing difficult to program. Pay attention to the duplicated word. <br>
 
 <div align="center">
-<img src="data/images/aufgabe9.png" />
+<img src="/images/aufgabe9.png" />
 <p>
 Figure 9: The transition matrix of the HMM for the word recognition
 </p>
@@ -305,15 +315,15 @@ Figure 9: The transition matrix of the HMM for the word recognition
 *Fertigstellung des Erkenners und Bestimmung der Wortfehlerrate* <br>
 ```bash
 # formal parameter:
---sourcedatadir ./dataset/ --savedir ./results/
+--sourcedatadir ./dataset/ --savedir ./trained/
 # environment variable:
  KMP_DUPLICATE_LIB_OK=TRUE
 ```
 <div align=center>
-<img src="data/images/aufgabe10.3.1.png" />
+<img src="/images/aufgabe10.3.1.png" />
 <p>Figure 10-1: The first 3 WER</p>
 <hr>
-<img src="data/images/aufgabe10.3.2.png" />
+<img src="/images/aufgabe10.3.2.png" />
 <p>Figure 7-2: The Total WER</p>
 </div>
 
