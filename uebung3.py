@@ -58,20 +58,19 @@ if __name__ == "__main__":
     ################
     # SPEKTRALANALYSE
     ################
-    compute_features()
+    # uebung 2
+    # compute_features()
     
     ################
     # DREIECKSFILTER
     ################
-    # uebung 3
-    # show_mel_filters()
+    show_mel_filters()
     
     
     ##############
     # MEL-SPEKTRUM
     ##############
-    # uebung 3
-    # compute_features(feature_type='FBANK')
+    compute_features(feature_type='FBANK')
     
     
     
