@@ -182,6 +182,8 @@ def run(config, datadicts=None):
                               evalscore)[:6]]) + ".json"), 'w', encoding='utf-8') as f:
             json.dump(outpre, f, ensure_ascii=False, indent=4)
 
+        print('Epoch: %d, Train accuracy: %f, Dev accuracy: %f' % (epoch + 1, trainscore, evalscore))
+
         # Implementation for early stopping: If the model accuracy on the dev set does not improve in
         # 5 epochs, training is terminated.
         torch.cuda.empty_cache()
