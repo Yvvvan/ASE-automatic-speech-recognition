@@ -272,6 +272,7 @@ def test(config, testdict, onestep=True, model=None):
     # Finding the model with the best performance on dev set
     modeldir = config["model_dir"]
     besttrainmodel, besttrainacc = find_best_model(os.listdir(modeldir))
+    print("Best model: {} | Best train acc: {}".format(besttrainmodel, besttrainacc))
     # Load model
     if model is None:
         model = torch.load(os.path.join(modeldir, besttrainmodel),
