@@ -1,0 +1,3 @@
+* Mit Python 3.9,
+import matplotlib
+matplotlib.use('TkAgg')

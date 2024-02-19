@@ -49,9 +49,9 @@ def test_model(datadir, hmm, model, parameters, testrun=False):
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./dataset', type=str,
+    parser.add_argument('--sourcedatadir', default='./dataset/', type=str,
                         help='Dir saves the datasource information')
-    parser.add_argument('--savedir', default='./trained', type=str, help='Dir to save trained model and results')
+    parser.add_argument('--savedir', default='./trained/', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
     return args
 

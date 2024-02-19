@@ -39,7 +39,7 @@ if __name__ == '__main__':
         "num_ceps": 13,
         "left_context": 10,
         "right_context": 10,
-        "data_dir": "./dataset",
+        "data_dir": "./dataset/",
     }
 
     feat_params = [config["window_size"], config["hop_size"],
