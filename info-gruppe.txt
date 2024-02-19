@@ -1,3 +1,4 @@
-* Mit Python 3.9,
-import matplotlib
-matplotlib.use('TkAgg')
+Julian Benedikt Dobler; 490209; dobler@campus.tu-berlin.de
+Yufan Dong; 462233; yufan.dong@campus.tu-berlin.de
+Mustapha El Mustapha; 501288; m.el.mustapha@campus.tu-berlin.de
+Henry Poppe;
