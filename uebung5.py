@@ -13,7 +13,7 @@ torch.cuda.manual_seed_all(SEED)
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./VoxCeleb_gender', type=str, help='Dir saves the datasource information')
+    parser.add_argument('--sourcedatadir', default='./torch_intro/dataset/VoxCeleb_gender', type=str, help='Dir saves the datasource information')
     parser.add_argument('--datasdir', default='./torch_intro/dataset', type=str, help='Dir saves the datasource information')
     parser.add_argument('--savedir', default='./torch_intro/trained', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
@@ -56,7 +56,7 @@ if __name__ == '__main__':
         "device": device,
         "lr": 0.001,
         "batch_size": 64,
-        "epochs": 50, 
+        "epochs": 5,
         "window_size": 25e-3,
         "hop_size": 10e-3,
         "feature_type": 'FBANK',
