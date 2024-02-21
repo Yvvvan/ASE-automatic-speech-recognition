@@ -12,7 +12,7 @@
 8. [Aufgabe 8: Viterbi-Algorithmus](#aufgabe-8)
 9. [Aufgabe 9: Verbundworterkennung](#aufgabe-9)
 10. [Aufgabe 10: Fertigstellung des Erkenners und Bestimmung der Wortfehlerrate](#aufgabe-10)
-
+11. [Aufgabe 11: Best Model](#aufgabe-11)
 
 ## folder structure
 ```bash
@@ -324,7 +324,15 @@ Figure 9: The transition matrix of the HMM for the word recognition
 <p>Figure 10-1: The first 3 WER</p>
 <hr>
 <img src="/images/aufgabe10.3.2.png" />
-<p>Figure 7-2: The Total WER</p>
+<p>Figure 10-2: The Total WER</p>
+</div>
+
+## Aufgabe 11
+<div align="center">
+<img src="/images/aufgabe11.jpg" />
+<p>
+Figure 11: Best Model
+</p>
 </div>
 
 ---
