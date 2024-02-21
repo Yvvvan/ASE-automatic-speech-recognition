@@ -94,9 +94,8 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------
     # 2.) with audio data
     # in Übung7 trainiertes DNN Model name
-    # model_name = '13_0.001_0.7004_0.6619'
-    model_name = '3_0.0001_0.7099_0.6800'
-    # model_name = 'baseline_model'
+    # model_name = '13_0.001_0.7004_0.6619'   # baseline
+    model_name = '9_0.000001_0.8392_0.7920'   # best model
     # Model Pfad
     model_dir = os.path.join(savedir, 'model', model_name + '.pkl')
     # Laden des DNNs
