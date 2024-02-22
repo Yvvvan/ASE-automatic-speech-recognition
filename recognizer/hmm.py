@@ -6,6 +6,7 @@ WORDS = {
     'name': ['sil', 'oh', 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
     'size': [1, 3, 15, 12, 6, 9, 9, 9, 12, 15, 6, 9],
     'gram': [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    # 'gram': [19561, 2568, 2594, 2593, 2586, 2577, 2582, 2545, 2596, 2576, 2567, 2545],
 }
 
 
@@ -120,6 +121,11 @@ class HMM:
         """
         Returns the transcription words
         """
+        # log likelihood
+        # 1. replace 0 with a small value
+        posteriors = np.where(posteriors == 0, 1e-16, posteriors)
+        # 2. calculate the log likelihood
+        posteriors = np.log(posteriors)
         state_sequence, pStar = viterbi(posteriors, self.logPi, self.logA)
         return self.getTranscription(state_sequence)
 
