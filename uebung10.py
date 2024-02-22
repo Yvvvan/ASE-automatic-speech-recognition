@@ -10,7 +10,8 @@ from recognizer.train import evaluation
 from tqdm import tqdm
 
 
-def test_model(datadir, hmm, model, parameters, testrun=False):
+def test_model(datadir, hmm, model, parameters, show_first_three=False):
+    show_three = show_first_three
     N_total, D_total, I_total, S_total = 0, 0, 0, 0
     count = 0
     # read the data
@@ -34,14 +35,14 @@ def test_model(datadir, hmm, model, parameters, testrun=False):
         I_total += I
         S_total += S
         count += 1
-        if testrun:
+        if show_three:
             print('-' * 50)
             print('REF: ', lab)
             print('OUT: ', words)
             print('N: ', N, 'D: ', D, 'I: ', I, 'S: ', S)
             print('current Total WER: ', 100 * (D_total + I_total + S_total) / N_total)
             if count == 3:
-                break
+                show_three = False
     WER = 100 * (D_total + I_total + S_total) / N_total
     return WER
 
@@ -97,6 +98,7 @@ if __name__ == "__main__":
     # model_name = '13_0.001_0.7004_0.6619'   # baseline
     model_name = '9_0.000001_0.8392_0.7920'   # best model (need the model2.py in recognizer folder)
     # Model Pfad
+    print('Model name: {}'.format(model_name))
     model_dir = os.path.join(savedir, 'model', model_name + '.pkl')
     # Laden des DNNs
     # model = torch.load(model_dir)
@@ -128,10 +130,9 @@ if __name__ == "__main__":
     # posteriors_dnn = outpre[file].T
     # words = hmm.posteriors_to_transcription(posteriors_dnn)
 
-    print('OUT: {}'.format(words))  # OUT: [’SEVEN’, ’OH’, ’ONE’, ’SEVEN’, ’OH’, ’FOUR’, ’NINE’]
-
+    print('DNN OUT: {}'.format(words))  # OUT: [’SEVEN’, ’OH’, ’ONE’, ’SEVEN’, ’OH’, ’FOUR’, ’NINE’]
     # ----------------------------------------------------------------------------------------------------------
     # 3) test DNN
-    wer = test_model(datadir, hmm, model, parameters)
     print('--' * 40)
+    wer = test_model(datadir, hmm, model, parameters, show_first_three=True)
     print("Total WER: {}".format(wer))
