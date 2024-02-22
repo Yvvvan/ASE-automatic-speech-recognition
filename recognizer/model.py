@@ -4,7 +4,7 @@ import torch
 class Classification(torch.nn.Module):
     def __init__(self, idim, odim, hidden_dim=512):
         torch.nn.Module.__init__(self)
-        # Define three fully connected layers followed by ReLU activation funtion
+        # Define three fully connected layers followed by ReLU activation function
         self.fc1 = torch.nn.Linear(idim, hidden_dim)
         self.relu1 = torch.nn.ReLU()
         self.fc2 = torch.nn.Linear(hidden_dim, hidden_dim)
