@@ -40,13 +40,14 @@ if __name__ == '__main__':
         "left_context": 10,
         "right_context": 10,
         "data_dir": "./dataset/",
+        "sourcedata_dir": "./dataset/"
     }
 
     feat_params = [config["window_size"], config["hop_size"],
                    config["feature_type"], config["n_filters"],
                    config["fbank_fmin"], config["fbank_fmax"],
                    config["num_ceps"], config["left_context"],
-                   config["right_context"], config["data_dir"]]
+                   config["right_context"], config["data_dir"], config["sourcedata_dir"]]
 
     # Load data
     traindict, devdict, testdict = utils.get_data(config["data_dir"])

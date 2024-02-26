@@ -46,7 +46,7 @@ class Dataloader(Dataset):  # For instantiating train, validation and test datas
         self.num_ceps = feat_params[6]
         self.left_context = feat_params[7]
         self.right_context = feat_params[8]
-        self.data_dir = feat_params[9]
+        self.data_dir = feat_params[10]
 
     def _get_keys(self, datadict):
         keys = list(datadict.keys())

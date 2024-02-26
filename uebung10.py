@@ -10,15 +10,15 @@ from recognizer.train import evaluation
 from tqdm import tqdm
 
 
-def test_model(datadir, hmm, model, parameters, show_first_three=False):
+def test_model(sourcedatadir, hmm, model, parameters, show_first_three=False, jsondatadir='./dataset/'):
     show_three = show_first_three
     N_total, D_total, I_total, S_total = 0, 0, 0, 0
     count = 0
     # read the data
-    traindict, devdict, testdict = get_data(datadir)
+    traindict, devdict, testdict = get_data(jsondatadir)
     outpre = test(parameters, testdict, onestep=False, model=model)
     for key in tqdm(testdict.keys(), total=len(testdict.keys()), desc='WER calculation:'):
-        lab_data = datadir + '/TIDIGITS-ASE/TEST/lab/' + key + '.lab'
+        lab_data = sourcedatadir + testdict[key]['audiodir'].replace('wav', 'lab')
         # read the lab data
         with open(lab_data, 'r') as f:
             lab = f.read().splitlines()
@@ -50,8 +50,8 @@ def test_model(datadir, hmm, model, parameters, show_first_three=False):
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./dataset/', type=str,
-                        help='Dir saves the datasource information')
+    parser.add_argument('--sourcedatadir', default='./dataset/', type=str, help='Dir saves the datasource information')
+    parser.add_argument('--datasdir', default='./dataset/', type=str, help='Dir saves the json information')
     parser.add_argument('--savedir', default='./trained/', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
     return args
@@ -68,7 +68,8 @@ if __name__ == "__main__":
     print("Arguments:")
     [print(key, val) for key, val in vars(args).items()]
 
-    datadir = args.sourcedatadir
+    sourcedatadir = args.sourcedatadir  # audio data
+    datadir = args.datasdir             # json data
     savedir = args.savedir
     # parameters for the feature extraction
     parameters = {'window_size': 25e-3,
@@ -95,8 +96,8 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------
     # 2.) with audio data
     # in Übung7 trainiertes DNN Model name
-    # model_name = '13_0.001_0.7004_0.6619'   # baseline
-    model_name = '9_0.000001_0.8392_0.7920'   # best model (need the model2.py in recognizer folder)
+    model_name = 'base13_0.001_0.7004_0.6619'   # baseline
+    # model_name = 'best9_0.000001_0.8392_0.7920'   # best model (need the model2.py in recognizer folder)
     # Model Pfad
     print('Model name: {}'.format(model_name))
     model_dir = os.path.join(savedir, 'model', model_name + '.pkl')
@@ -116,6 +117,7 @@ if __name__ == "__main__":
     file = test_audio.split('/')[-1].split('.')[0]
     parameters['device'] = device
     parameters['data_dir'] = datadir
+    parameters['sourcedata_dir'] = sourcedatadir
     parameters['batch_size'] = 1
     parameters['NWORKER'] = 0
     parameters['model_dir'] = os.path.join(savedir, 'model')
@@ -134,5 +136,5 @@ if __name__ == "__main__":
     # ----------------------------------------------------------------------------------------------------------
     # 3) test DNN
     print('--' * 40)
-    wer = test_model(datadir, hmm, model, parameters, show_first_three=True)
+    wer = test_model(sourcedatadir, hmm, model, parameters, show_first_three=True, jsondatadir = datadir)
     print("Total WER: {}".format(wer))

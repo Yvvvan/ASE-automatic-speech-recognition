@@ -139,7 +139,7 @@ def run(config, datadicts=None):
                    config["feature_type"], config["n_filters"],
                    config["fbank_fmin"], config["fbank_fmax"],
                    config["num_ceps"], config["left_context"],
-                   config["right_context"], config["data_dir"]]
+                   config["right_context"], config["data_dir"], config["sourcedata_dir"]]
 
     # Create 3 datasets from given training, dev and test meta-data
     train_dataset = Dataloader(traindict, feat_params)
@@ -260,7 +260,7 @@ def test(config, testdict, onestep=True, model=None):
                    config["feature_type"], config["n_filters"],
                    config["fbank_fmin"], config["fbank_fmax"],
                    config["num_ceps"], config["left_context"],
-                   config["right_context"], config["data_dir"]]
+                   config["right_context"], config["data_dir"], config["sourcedata_dir"]]
 
     test_dataset = Dataloader(testdict, feat_params)
 
@@ -294,7 +294,7 @@ def wav_to_posteriors(model, audio_file_dict, parameters, plot=False):
                    parameters["feature_type"], parameters["n_filters"],
                    parameters["fbank_fmin"], parameters["fbank_fmax"],
                    parameters["num_ceps"], parameters["left_context"],
-                   parameters["right_context"], parameters["data_dir"]]
+                   parameters["right_context"], parameters["data_dir"], parameters["sourcedata_dir"]]
 
     test_dataset = Dataloader(audio_file_dict, feat_params)
 

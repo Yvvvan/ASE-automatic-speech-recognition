@@ -13,9 +13,9 @@ torch.cuda.manual_seed_all(SEED)
 def get_args():
     parser = argparse.ArgumentParser()
     # get arguments from outside
-    parser.add_argument('--sourcedatadir', default='./dataset', type=str, help='Dir saves the datasource information')
-    parser.add_argument('--datasdir', default='./dataset', type=str, help='Dir saves the datasource information')
-    parser.add_argument('--savedir', default='./trained', type=str, help='Dir to save trained model and results')
+    parser.add_argument('--sourcedatadir', default='./dataset/', type=str, help='Dir saves the datasource information')
+    parser.add_argument('--datasdir', default='./dataset/', type=str, help='Dir saves the json information')
+    parser.add_argument('--savedir', default='./trained/', type=str, help='Dir to save trained model and results')
     args = parser.parse_args()
     return args
 
@@ -35,8 +35,8 @@ if __name__ == '__main__':
         device = 'cpu'      # use CPUS
 
     # Create folders to save the trained models and evaluation results
-    modeldir = os.path.join(savedir, 'model')
-    resultsdir = os.path.join(savedir, 'results')
+    modeldir = os.path.join(savedir, 'model/')
+    resultsdir = os.path.join(savedir, 'results/')
     for makedir in [modeldir, resultsdir, datasetdir]:
         if not os.path.exists(makedir):
             os.makedirs(makedir)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     config = {
         "NWORKER": 0,
         "device": device,
-        "lr": 0.001,
+        "lr": 1e-4,
         "batch_size": 1,
         "epochs": 50,
         "window_size": 25e-3,
@@ -60,7 +60,8 @@ if __name__ == '__main__':
         "num_ceps": 13,
         "left_context": 10,
         "right_context": 10,
-        "data_dir": "./dataset/",
+        "data_dir": datasetdir,
+        "sourcedata_dir": sourcedatadir,
         "results_dir": resultsdir,
         "model_dir": modeldir
     }
