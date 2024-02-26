@@ -123,7 +123,7 @@ class HMM:
         """
         # log likelihood
         # 1. replace 0 with a small value
-        posteriors = np.where(posteriors == 0, 1e-16, posteriors)
+        posteriors = np.where(posteriors == 0, 1e-10, posteriors)
         # 2. calculate the log likelihood
         posteriors = np.log(posteriors)
         state_sequence, pStar = viterbi(posteriors, self.logPi, self.logA)
