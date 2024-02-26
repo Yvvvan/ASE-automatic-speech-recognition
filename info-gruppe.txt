@@ -1,5 +1,5 @@
 Gruppe 4
-Julian Benedikt Dobler; 490209; dobler@campus.tu-berlin.de
-Yufan Dong; 462233; yufan.dong@campus.tu-berlin.de
-Mustapha El Mustapha; 501288; m.el.mustapha@campus.tu-berlin.de
-Henry Poppe; 400806; henry.poppe@campus.tu-berlin.de
+Julian Benedikt Dobler; 	490209; 	dobler@campus.tu-berlin.de
+Yufan Dong; 		462233; 	yufan.dong@campus.tu-berlin.de
+Mustapha El Mustapha; 	501288; 	m.el.mustapha@campus.tu-berlin.de
+Henry Poppe; 		400806; 	henry.poppe@campus.tu-berlin.de
