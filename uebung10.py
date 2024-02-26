@@ -97,7 +97,7 @@ if __name__ == "__main__":
     # 2.) with audio data
     # in Übung7 trainiertes DNN Model name
     model_name = 'base13_0.001_0.7004_0.6619'   # baseline
-    # model_name = 'best9_0.000001_0.8392_0.7920'   # best model (need the model2.py in recognizer folder)
+    model_name = 'best9_0.000001_0.8392_0.7920'   # best model (need the model2.py in recognizer folder)
     # Model Pfad
     print('Model name: {}'.format(model_name))
     model_dir = os.path.join(savedir, 'model', model_name + '.pkl')
