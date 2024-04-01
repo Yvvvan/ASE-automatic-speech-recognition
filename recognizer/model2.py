@@ -1,7 +1,7 @@
 import torch
 
 class Classification(torch.nn.Module):
-    def __init__(self, idim=39, odim=1, hidden_dim=512, blstm_hidden_dim=128, num_layers=1):
+    def __init__(self, idim=39, odim=1, hidden_dim=512, blstm_hidden_dim=128, num_layers=2):
         super(Classification, self).__init__()
         self.blstm = torch.nn.LSTM(input_size=512, hidden_size=blstm_hidden_dim, num_layers=num_layers, batch_first=True, bidirectional=True)
         self.fc1 = torch.nn.Linear(idim, hidden_dim)
