@@ -1,6 +1,7 @@
-/übungsblatt/
 /.idea/
-/data/VoxCeleb_gender/
+/torch_intro/dataset/VoxCeleb_gender/
 /data/TIDIGITS-ASE/
 /torch_intro/trained/model/
 /dataset/TIDIGITS-ASE/
+/trained/4layers/
+/trained/leakyRelu/
